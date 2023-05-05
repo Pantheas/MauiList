@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>MauiList.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>MauiList.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CodeMonkeys.Core" Version="2.2.5" />
+    <PackageReference Include="CodeMonkeys.MVVM" Version="2.2.4" />
+  </ItemGroup>
+
+</Project>

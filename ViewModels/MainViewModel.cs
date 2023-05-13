@@ -1,8 +1,7 @@
 ﻿using CodeMonkeys.MVVM;
+using CodeMonkeys.MVVM.Commands;
 using CodeMonkeys.MVVM.ViewModels;
-
-using MauiList.Infrastructure.Interfaces;
-
+using MauiList.Infrastructure.Interfaces.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -28,8 +27,6 @@ namespace MauiList.ViewModels
 
 
 
-        public ICommand ListSelectedCommand { get; }
-
         public ICommand CreateNewListCommand { get; }
 
 
@@ -37,6 +34,9 @@ namespace MauiList.ViewModels
             IListsService listsService)
         {
             _listsService = listsService;
+
+            CreateNewListCommand = new AsyncCommand(
+                CreateNewListAsync);
         }
 
 
@@ -59,6 +59,12 @@ namespace MauiList.ViewModels
 
 
             await base.InitializeAsync();
+        }
+
+
+        private async Task CreateNewListAsync()
+        {
+
         }
     }
 }

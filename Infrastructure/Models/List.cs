@@ -30,5 +30,19 @@ namespace MauiList.Infrastructure.Models
             get => GetValue(DateTime.Now);
             set => SetValue(value);
         }
+
+
+
+        public void ClearIsDirtyFlag(
+            bool clearEntries = true)
+        {
+            foreach (var entry in Entries)
+            {
+                entry.ClearIsDirtyFlag();
+            }
+
+
+            base.ClearIsDirtyFlag();
+        }
     }
 }

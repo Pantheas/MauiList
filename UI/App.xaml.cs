@@ -15,21 +15,13 @@ public partial class App :
 		InitializeComponent();
 
 
-        var container = DryFactory.CreateInstance();
+        var bootstrap = new Bootstrap();
+        bootstrap.ConfigureContainer();
 
-
-        Infrastructure.Bootstrap.ConfigureContainer(
-            container);
-
-        ViewModels.Bootstrap.ConfigureContainer(
-            container);
-
-        SetMainPage(
-            container);
+        SetMainPage();
 	}
 
-    private void SetMainPage(
-        IDependencyContainer container)
+    private void SetMainPage()
     {
         var viewModel = ViewModelFactory.Resolve<MainViewModel>();
 

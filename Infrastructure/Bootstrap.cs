@@ -1,7 +1,6 @@
 ﻿using CodeMonkeys.DependencyInjection;
 using CodeMonkeys.Navigation;
-
-using MauiList.Infrastructure.Interfaces;
+using MauiList.Infrastructure.Interfaces.Services;
 using MauiList.Infrastructure.Services.DAL;
 
 using System;
@@ -17,6 +16,7 @@ namespace MauiList.Infrastructure
         public static void ConfigureContainer(
             IDependencyRegister container)
         {
+            container.RegisterType<IListsRepository, LocalListsRepository>();
             container.RegisterType<IListsService, ListsService>();
         }
     }

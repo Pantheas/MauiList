@@ -1,14 +1,11 @@
 ﻿using CodeMonkeys.MVVM.Attributes;
+using CodeMonkeys.MVVM.Commands;
 using CodeMonkeys.MVVM.ViewModels;
 
 using MauiList.Infrastructure.Models;
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MauiList.ViewModels
 {
@@ -26,6 +23,22 @@ namespace MauiList.ViewModels
         public ObservableCollection<ListEntry> Entries =>
             new(List.Entries);
 
+        public string NewEntryContent
+        {
+            get => GetValue<string>();
+            set => SetValue(value);
+        }
+
+
+        public ICommand AddNewEntryCommand { get; }
+
+
+        public ListViewModel()
+        {
+            AddNewEntryCommand = new AsyncCommand(
+                AddNewListEntry,
+                CanAddNewListEntry);
+        }
 
 
         public override async Task InitializeAsync(
@@ -36,6 +49,27 @@ namespace MauiList.ViewModels
 
             await base.InitializeAsync(
                 list);
+        }
+
+
+        private bool CanAddNewListEntry()
+        {
+            return string.IsNullOrWhiteSpace(
+                NewEntryContent) == false;
+        }
+
+        private Task AddNewListEntry()
+        {
+            var entry = new ListEntry
+            {
+                Content = NewEntryContent
+            };
+
+            Entries.Add(
+                entry);
+
+
+            return Task.CompletedTask;
         }
     }
 }

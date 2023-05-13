@@ -1,7 +1,7 @@
-﻿using MauiList.Infrastructure.Interfaces.Services;
-using MauiList.Infrastructure.Models;
+﻿using LiteDB;
 
-using SQLite;
+using MauiList.Infrastructure.Interfaces.Services;
+using MauiList.Infrastructure.Models;
 
 using System.Linq.Expressions;
 
@@ -10,20 +10,7 @@ namespace MauiList.Infrastructure.Services.DAL
     public class LocalListsRepository :
         IListsRepository
     {
-        private const SQLiteOpenFlags sqliteOpenFlags =
-            // open the database in read/write mode
-            SQLiteOpenFlags.ReadWrite |
-            // create the database if it doesn't exist
-            SQLiteOpenFlags.Create |
-            // enable multi-threaded database access
-            SQLiteOpenFlags.SharedCache |
-            // the file is encrypted and inaccessible while the device is locked.
-            SQLiteOpenFlags.ProtectionComplete;
-
-
-
         private readonly IFileSystemService _fileSystemService;
-        private SQLiteAsyncConnection _database;
         
         
         public LocalListsRepository(
@@ -33,74 +20,117 @@ namespace MauiList.Infrastructure.Services.DAL
         }
 
 
-        public async Task<bool> AddOrUpdateAsync(
+        public bool Add(
             List list)
         {
-            await EnsureDatabaseConnectionAsync();
+            using var database = GetDatabase();
+
+            var collection = database.GetCollection<List>();
+
+            var id = collection.Insert(
+                list);
+            
+            EnsureIndex(
+                collection);
 
 
-            return await _database.InsertOrReplaceAsync(
-                list) >= 1;
+            return id.AsGuid != Guid.Empty;
         }
 
-        public async Task<bool> DeleteAsync(
+
+        public bool Update(
             List list)
         {
-            await EnsureDatabaseConnectionAsync();
+            using var database = GetDatabase();
+
+            var collection = database.GetCollection<List>();
+
+            bool updated = collection.Update(
+                list);
+
+            EnsureIndex(
+                collection);
 
 
-            return await _database.DeleteAsync(
-                list) >= 1;
+            return updated;
         }
 
 
-        public async Task<IEnumerable<List>> GetAllAsync()
+        public bool Delete(
+            List list)
         {
-            await EnsureDatabaseConnectionAsync();
+            using var database = GetDatabase();
+
+            var collection = database.GetCollection<List>();
+            
+            bool deleted = collection.Delete(
+                list.ID);
+            
+            EnsureIndex(
+                collection);
 
 
-            return await _database.Table<List>()
-                .ToListAsync();
+            return deleted;
         }
 
 
-        public async Task<List> GetAsync(
+        public IEnumerable<List> GetAll()
+        {
+            using var database = GetDatabase();
+
+
+            return database.GetCollection<List>()
+                .FindAll();
+        }
+
+
+        public List Get(
             Guid id)
         {
-            await EnsureDatabaseConnectionAsync();
+            using var database = GetDatabase();
 
 
-            return await _database.GetAsync<List>(
-                id);
+            return database.GetCollection<List>()
+                .FindById(id);
         }
 
-        public async Task<IEnumerable<List>> GetAsync(
+        public IEnumerable<List> Get(
             Expression<Func<List, bool>> filter)
         {
-            await EnsureDatabaseConnectionAsync();
+            using var database = GetDatabase();
 
 
-            return await _database
-                .Table<List>()
-                .Where(filter)
-                .ToListAsync();
+            return database.GetCollection<List>()
+                .Find(filter);
         }
 
 
-        private async Task EnsureDatabaseConnectionAsync()
+
+        private ILiteDatabase GetDatabase()
         {
-            if (_database is not null)
+            var connectionString = new ConnectionString()
+            {
+                Filename = _fileSystemService.DatabaseFilePath,
+                Connection = ConnectionType.Shared
+            };
+
+
+            return new LiteDatabase(
+                connectionString);
+        }
+
+        private static void EnsureIndex(
+            ILiteCollection<List> collection)
+        {
+            if (collection == null)
             {
                 return;
             }
 
 
-            _database = new SQLiteAsyncConnection(
-                _fileSystemService.DatabaseFilePath,
-                sqliteOpenFlags);
-
-            await _database.CreateTableAsync<Models.List>();
-            await _database.CreateTableAsync<Models.ListEntry>();
+            collection.EnsureIndex<Guid>(
+                list => list.ID,
+                unique: true);
         }
     }
 }

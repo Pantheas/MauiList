@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="CodeMonkeys.Core" Version="2.2.5" />
     <PackageReference Include="CodeMonkeys.MVVM" Version="2.2.4" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+    <PackageReference Include="LiteDB" Version="5.0.16" />
   </ItemGroup>
 
 </Project>

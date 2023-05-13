@@ -21,6 +21,7 @@ namespace MauiList.UI
         internal void ConfigureContainer()
         {
             _container.RegisterType<IFileSystemService, FileSystemService>();
+            _container.RegisterType<IPopupService, PopupService>();
 
 
             Infrastructure.Bootstrap.ConfigureContainer(

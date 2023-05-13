@@ -6,18 +6,21 @@ namespace MauiList.Infrastructure.Interfaces.Services
 {
     public interface IListsRepository
     {
-        Task<bool> AddOrUpdateAsync(
+        bool Add(
             List list);
 
-        Task<bool> DeleteAsync(
+        bool Update(
             List list);
 
-        Task<IEnumerable<List>> GetAllAsync();
+        bool Delete(
+            List list);
 
-        Task<IEnumerable<List>> GetAsync(
+        IEnumerable<List> GetAll();
+
+        IEnumerable<List> Get(
             Expression<Func<List, bool>> filter);
 
-        Task<List> GetAsync(
+        List Get(
             Guid id);
     }
 }

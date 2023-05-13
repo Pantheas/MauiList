@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MauiList.Infrastructure.Interfaces.Services
+﻿namespace MauiList.Infrastructure.Interfaces.Services
 {
-    internal class IPopupService
+    public interface IPopupService
     {
+        Task ShowAlertAsync(
+            string title,
+            string message,
+            string cancel);
+
+        Task<string> ShowActionSheetAsync(
+            string title,
+            string cancel,
+            string[] options);
+
+        Task<string> ShowPromptAsync(
+            string title,
+            string message,
+            string accept,
+            string cancel);
     }
 }

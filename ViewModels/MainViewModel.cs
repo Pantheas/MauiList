@@ -1,7 +1,10 @@
 ﻿using CodeMonkeys.MVVM;
 using CodeMonkeys.MVVM.Commands;
 using CodeMonkeys.MVVM.ViewModels;
+
 using MauiList.Infrastructure.Interfaces.Services;
+using MauiList.Infrastructure.Models;
+
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -11,6 +14,7 @@ namespace MauiList.ViewModels
         ViewModelBase
     {
         private readonly IListsService _listsService;
+        private readonly IPopupService _popupService;
         
 
         public ObservableCollection<ListViewModel> Lists
@@ -31,9 +35,12 @@ namespace MauiList.ViewModels
 
 
         public MainViewModel(
-            IListsService listsService)
+            IListsService listsService
+            , IPopupService popupService)
         {
             _listsService = listsService;
+            _popupService = popupService;
+
 
             CreateNewListCommand = new AsyncCommand(
                 CreateNewListAsync);
@@ -42,7 +49,7 @@ namespace MauiList.ViewModels
 
         public override async Task InitializeAsync()
         {
-            var lists = await _listsService.GetAllAsync();
+            var lists = _listsService.GetAll();
             var listViewModels = new ObservableCollection<ListViewModel>();
 
             foreach (var list in lists)
@@ -54,7 +61,7 @@ namespace MauiList.ViewModels
                     listViewModel);
             }
 
-            SelectedList = listViewModels.First();
+            SelectedList = listViewModels.FirstOrDefault();
             Lists = listViewModels;
 
 
@@ -64,7 +71,20 @@ namespace MauiList.ViewModels
 
         private async Task CreateNewListAsync()
         {
+            string listName = await _popupService.ShowPromptAsync(
+                "title",
+                "message",
+                "ok",
+                "cancel");
 
+
+            var list = new List
+            {
+                Name = listName,
+            };
+
+            _listsService.Add(
+                list);
         }
     }
 }

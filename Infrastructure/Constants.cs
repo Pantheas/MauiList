@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const string DatabaseFileName = "lists.db3";
+        public const string DatabaseFileName = "lists.db";
     }
 }

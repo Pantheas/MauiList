@@ -75,7 +75,9 @@ namespace MauiList.UI.Behaviors
 
             AssociatedObject.CurrentItem =
                 selectedContent ??
-                AssociatedObject.Items.First();
+                AssociatedObject.Items?
+                    .OfType<ShellContent>()?
+                    .FirstOrDefault();
         }
 
 

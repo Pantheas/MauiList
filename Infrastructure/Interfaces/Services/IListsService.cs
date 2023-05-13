@@ -4,18 +4,20 @@ namespace MauiList.Infrastructure.Interfaces.Services
 {
     public interface IListsService
     {
-        public Task<IEnumerable<Models.List>> GetAllAsync();
+        IEnumerable<Models.List> GetAll();
 
-        public Task<Models.List> GetAsync(
+        Models.List Get(
             Guid id);
-        public Task<IEnumerable<Models.List>> GetAsync(
+        IEnumerable<Models.List> Get(
             Expression<Func<Models.List, bool>> filter);
 
-        public Task AddAsync(
+        bool Add(
             Models.List list);
-        public Task UpdateAsync(
+
+        bool Update(
             Models.List list);
-        public Task DeleteAsync(
+
+        bool Delete(
             Models.List list);
     }
 }

@@ -19,46 +19,46 @@ namespace MauiList.Infrastructure.Services.DAL
 
 
 
-        public async Task AddAsync(
+        public bool Add(
             List list)
         {
-            await _repository.AddOrUpdateAsync(
+            return _repository.Add(
                 list);
         }
 
-        public async Task UpdateAsync(
+        public bool Update(
             List list)
         {
-            await _repository.AddOrUpdateAsync(
+            return _repository.Update(
                 list);
         }
 
-        public async Task DeleteAsync(
+        public bool Delete(
             List list)
         {
-            await _repository.DeleteAsync(
+            return _repository.Delete(
                 list);
         }
 
 
-        public async Task<List> GetAsync(
+        public List Get(
             Guid id)
         {
-            return await _repository.GetAsync(
+            return _repository.Get(
                 id);
         }
 
-        public async Task<IEnumerable<List>> GetAsync(
+        public IEnumerable<List> Get(
             Expression<Func<List, bool>> filter)
         {
-            return await _repository.GetAsync(
+            return _repository.Get(
                 filter);
         }
 
 
-        public async Task<IEnumerable<Models.List>> GetAllAsync()
+        public IEnumerable<Models.List> GetAll()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAll();
         }
     }
 }

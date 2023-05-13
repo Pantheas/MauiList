@@ -1,7 +1,5 @@
 ﻿using CodeMonkeys.MVVM;
-
-using MauiList.Infrastructure.Interfaces;
-
+using MauiList.Infrastructure.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using CodeMonkeys.MVVM;
 
-namespace MauiList.Infrastructure.Interfaces
+namespace MauiList.Infrastructure.Interfaces.Services
 {
     public interface INavigationService
     {
